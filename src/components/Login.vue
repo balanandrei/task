@@ -2,8 +2,6 @@
   <v-container>
     <v-row class="text-center">
       <v-col cols="12">
-        <router-link to="/index">Go to Index</router-link>
-
         <v-img
           :src="require('../assets/logo.png')"
           class="my-3"
@@ -59,11 +57,12 @@
 import userList from "../json/users.json";
 
 export default {
-  name: "Login",
+  name: "LoginComp",
 
   data: () => ({
     valid: false,
     invalidCredentials: false,
+    authenticated: false,
     email: "",
     password: "",
     emailRules: [
@@ -81,9 +80,16 @@ export default {
       this.invalidCredentials = false;
 
       function checkLogin() {
-        const check = vm.users.some((el) => el.email === vm.email && el.password === vm.password);
+        const check = vm.users.some(
+          (el) => el.email === vm.email && el.password === vm.password
+        );
         if (check === false) {
           vm.invalidCredentials = true;
+        } else {
+          vm.authenticated = true;
+          localStorage.setItem("authenticated", true);
+
+          vm.$router.push({ name: "index" });
         }
         console.log("check login", check);
       }
